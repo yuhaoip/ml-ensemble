@@ -55,6 +55,28 @@ class Perceptron(object):
             self.errors_.append(errors)
         return self
     
+    # ********************************************************
+    """
+    # Only used when applying to continual prediction, SSE cost func
+    # And now batch gradient descend rather than random...
+    """
+    def fit_sse(self, X, y):
+        self.w_ = np.zeros(1+X.shape[1])
+        self.cost_ = []          # Instead of misclassification nums, use cost func.
+        
+        for _ in range(self.n_iter):
+            output = self.net_result(X)
+            errors = (y - output)
+            self.w_[1:] += self.eta * X.T.dot(errors)
+            self.w_[0] += self.eta * errors.sum()
+            
+            cost = (errors**2).sum()/2.0
+            self.cost_.append(cost)
+            
+        return self
+
+    # ********************************************************
+    
     # After fitting, we have got the should-be weights!!
     # Get the predicted net results
     def net_result(self, X):
@@ -90,15 +112,34 @@ def plot_decision_regions(X, y, classifier, resolution=0.02):
     Z = classifier.predict(np.array([xx1.ravel(),xx2.ravel()]).T)
     Z = Z.reshape(xx1.shape)
     
-    plt.figure('decision regions')
-    plt.contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
-    plt.xlim(xx1.min(), xx1.max())
-    plt.ylim(xx2.min(), xx2.max())
-    
-    # plot samples
-    for idx, c1s in enumerate(np.unique(y)):
-        plt.scatter(x=X[y==c1s,0], y=X[y==c1s,1], alpha=0.8,
-                    c = cmap(idx), marker=markers[idx], label='class %d'%c1s)
+    def show():
+        # plot the regions
+        fig, ax = plt.subplots(nrows=1,ncols=2,figsize=(8,4))
+        fig.canvas.set_window_title('Decision region and learning rate curve')
+        ax[0].contourf(xx1, xx2, Z, alpha=0.4, cmap=cmap)
+        ax[0].set_xlim(xx1.min(), xx1.max())
+        ax[0].set_ylim(xx2.min(), xx2.max())
+        ax[0].set_title('decision region')
+        
+        # plot samples
+        for idx, c1s in enumerate(np.unique(y)):
+            ax[0].scatter(x=X[y==c1s,0], y=X[y==c1s,1], alpha=0.8,
+                        c = cmap(idx), marker=markers[idx], label='class %d'%c1s)
+            
+        # plot the learning rate curve
+        if 'cost_' in classifier.__dict__.keys():
+            ax[1].plot(range(1,len(classifier.cost_)+1), classifier.cost_,
+                       marker = 'o')
+        else:
+            ax[1].plot(range(1,len(classifier.errors_)+1), classifier.errors_,
+                       marker = 'o')
+        ax[1].set_xlabel('Epochs')
+        ax[1].set_ylabel('Sum-squared-error')
+        ax[1].set_title('learning rate curve')
+        
+        plt.show()
+            
+    return show
         
         
         
