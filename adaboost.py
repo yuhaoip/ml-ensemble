@@ -22,8 +22,7 @@ labelMat = mat([1.0,1.0,-1.0,-1.0,1.0]).T
 ---------------------------
 下面建立决策树桩的Adaboost算法
 """
-from numpy import *
-from math import log
+from numpy import mat,shape,ones,zeros,log,exp,multiply,sign
 from sklearn.datasets import load_iris
 
 
@@ -113,7 +112,7 @@ def adaBoostTraining(dataMat,labelMat,numIter=30):
     # 初始化加法模型的预测结果
     addCsf = mat(zeros((m,1)))
     
-    for i in range(numIter):
+    for _ in range(numIter):
         bestStump = buildStump(dataMat,labelMat,D)
 #         print 'the weighted matrix D: ', D.T
         # 根据权重误分率，计算本次分类器的系数
