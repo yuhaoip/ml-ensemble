@@ -1,4 +1,8 @@
 # -*- coding:utf-8 -*-
+"""
+Stochatic Gradient Descend
+"""
+
 
 import numpy as np
 import matplotlib.pyplot as plt 
