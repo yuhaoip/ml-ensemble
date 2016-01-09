@@ -35,7 +35,8 @@ class SBS():
         dim = X_train.shape[1]
         self.indices_ = tuple(range(dim))
         self.subsets_ = [self.indices_]
-        score = self._calc_score(X_train,y_train,self.indices_)
+        score = self._calc_score(X_train,y_train,X_test,
+                                 y_test,self.indices_)
         self.scores_ = [score]
         
         while dim > self.k_features:
