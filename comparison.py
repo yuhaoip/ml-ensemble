@@ -46,7 +46,6 @@ le = LabelEncoder()
 y = le.fit_transform(y)
 
 
-
 """"
 --------------------
 Logistic Regression:
@@ -81,6 +80,7 @@ def plot_data(X, y):
     ax[2].set_title('Nomalized data')
     plt.show()
 
+
 ## Train the LogisticRegression Classifier
 # Diagnoise bias&variance by plotting Learning Curve,
 # choose best param. C(tuning overfitting) by Validation Curve.
@@ -105,7 +105,6 @@ def plot_learning_curve(param_C=0.1, validation_curve_=None):
         test_mean = np.mean(test_scores,axis=1)
         test_std = np.std(test_scores,axis=1)
         
-        
         ax[0].plot(train_sizes, train_mean,
                    c='blue', marker='o', markersize=5,
                    label='training accuracy')
@@ -126,7 +125,7 @@ def plot_learning_curve(param_C=0.1, validation_curve_=None):
         ax[0].set_xlabel('Number of training samples')
         ax[0].set_ylabel('Accuracy')
         ax[0].legend(loc='best')
-        ax[0].set_ylim([0.8,1.0])
+        ax[0].set_ylim([0.8,1.1])
         
         # Validation_vurve is a good choice when there's only 
         # one param to tune. Such as inverse penality C.
@@ -187,6 +186,7 @@ def get_f1_scores(clf):
     
     return precision,recall,f1
 
+
 # 传入estimator求得cross_validation分数  
 def get_kf_scores(clf):
     scores = cross_val_score(estimator=clf,
@@ -194,6 +194,7 @@ def get_kf_scores(clf):
                              y=y_train,
                              cv=10)
     return scores
+
 
 def get_scores(clf):
     validation_scores = get_kf_scores(clf)
@@ -207,6 +208,7 @@ def get_scores(clf):
     print 'The train scores: ', predict_scores
     print 'The test scores:', test_scores   
 #########################################################    
+
 
 
 """
@@ -244,6 +246,7 @@ def get_best_tree():
     return gs.best_estimator_
 
 
+
 """
 About result:
 Get the best params:{max_depth:5, min_samples_split:4}
@@ -273,6 +276,7 @@ def get_rf():
             % (y_train_score,y_test_score)
     
 
+
 """
 As gradient boosting classifier is very likely to
 random forest, even better. Let't me have a try!
@@ -294,6 +298,7 @@ def get_ada():
     ada_test_score = accuracy_score(y_test, y_test_pred)
     print 'AdaBoost train/test accuracies: %.4f/%.4f' \
             % (ada_train_score,ada_test_score)
+
 
 
 """
